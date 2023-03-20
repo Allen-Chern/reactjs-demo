@@ -1,7 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Container, Grid, Link, TextField, Typography } from "@material-ui/core";
+import { AxiosResponse } from 'axios';
+import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
+import { sendRegisterRequest } from '../services/api';
 import { formStyles } from '../utils/form-styles';
 
 type FormInputs = {
@@ -37,9 +41,23 @@ const Register = () => {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
-  const onSubmit = (data: FormInputs) => {
-    console.log(data);
+  const messageHandler = (response: AxiosResponse<any,any>) => {
+    if(response.status === 400) {
+      console.log(response);
+      enqueueSnackbar(response.data.error, { variant: "error" });
+    }
+    else {
+      enqueueSnackbar('You will recieve a verification mail, please check your email inbox.', { variant: "success" });
+      navigate('/login');
+    }
+  }
+
+  const onSubmit = async (data: FormInputs) => {
+    const response = await sendRegisterRequest(data);
+    messageHandler(response);
   };
 
 

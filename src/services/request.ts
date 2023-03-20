@@ -17,16 +17,7 @@ service.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (!error.response) {
-      //NotificationManager.error("Server error, please retry.");
-      throw error;
-    } else if (error.response?.status === 401) {
-      //store.clear();
-      // map shouldn't redirect to login.
-      window.location.href = window.location.origin + "/login";
-    } else {
-      throw error.response;
-    }
+    return error.response;
   }
 );
 

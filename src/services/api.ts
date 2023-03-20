@@ -11,10 +11,10 @@ type RegisterPayload = {
   confirmPassword: string;
 };
 
-export const login = async (data: LoginPayload) => {
+export const sendLoginRequest = async (data: LoginPayload) => {
   return await request.post(`/user/login`, data);
 };
 
-export const register = async (data: RegisterPayload) => {
+export const sendRegisterRequest = async (data: RegisterPayload) => {
   return await request.post(`/user/register`, data);
 };
