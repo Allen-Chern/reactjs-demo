@@ -2,9 +2,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Button, Container, Divider, Grid, Link, TextField, Typography
 } from "@material-ui/core";
+import { AxiosResponse } from "axios";
+import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import * as yup from 'yup';
 import { facebookLoginUrl, googleLoginUrl } from "../configs/api";
+import { useAuth } from "../context/auth-context";
+import { sendLoginRequest } from "../services/api";
 import { formStyles } from "../utils/form-styles";
 
 type FormInputs = {
@@ -27,9 +32,26 @@ const Login = () => {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
+  const { setUser } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
-  const onSubmit = (data: FormInputs) => {
-    console.log(data);
+  const messageHandler = (response: AxiosResponse<any,any>) => {
+    if(response.status === 400) {
+      enqueueSnackbar(response.data.error, { variant: "error" });
+    }
+    else {
+      enqueueSnackbar('Success.', { variant: "success" });
+      setUser(response.data);
+      
+      const navigateTo = response.data.isActivate ? '/dashboard' : '/inactivate';
+      navigate(navigateTo);
+    }
+  }
+
+  const onSubmit = async (data: FormInputs) => {
+    const response = await sendLoginRequest(data);
+    messageHandler(response);
   };
 
   const handleFacebookLogin = () => {
