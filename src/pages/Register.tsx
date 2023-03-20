@@ -46,7 +46,6 @@ const Register = () => {
 
   const messageHandler = (response: AxiosResponse<any,any>) => {
     if(response.status === 400) {
-      console.log(response);
       enqueueSnackbar(response.data.error, { variant: "error" });
     }
     else {
