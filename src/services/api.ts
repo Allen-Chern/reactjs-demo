@@ -10,9 +10,21 @@ type RegisterPayload = {
   password: string;
   confirmPassword: string;
 };
+type ResetPasswordPayload = {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+};
+type ResetNamePayload = {
+  name: string;
+};
 
 export const sendLoginRequest = async (data: LoginPayload) => {
   return await request.post(`/auth/login`, data);
+};
+
+export const sendLogoutRequest = async () => {
+  return await request.post("/auth/logout");
 };
 
 export const sendMeRequest = async () => {
@@ -29,4 +41,20 @@ export const sendVerificationRequest = async (token: string) => {
 
 export const sendResendVerificationRequest = async () => {
   return await request.post("/user/resendVerification");
+};
+
+export const sendDashboardRequest = async () => {
+  return await request.get("/user/dashboard");
+};
+
+export const sendStatisticsRequest = async () => {
+  return await request.get("/user/statistics");
+};
+
+export const sendResetPasswordRequest = async (data: ResetPasswordPayload) => {
+  return await request.put("/user/changePassword", data);
+};
+
+export const sendResetNameRequest = async (data: ResetNamePayload) => {
+  return await request.put("/user/updateInfo", data);
 };
