@@ -1,18 +1,27 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { sendMeRequest } from "../services/api";
 
+enum ProviderType {
+  BASIC = 'BASIC',
+  FACEBOOK = 'FACEBOOK',
+  GOOGLE = 'GOOGLE',
+}
+
 interface User {
   id: string;
   name: string;
   email: string;
+  providerType: ProviderType;
   isActivate: boolean;
+  createdAt: Date;
 }
 
 interface AuthContextType {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   isAuthenticated: boolean;
-  isActivated: boolean;
+  isActivated: boolean | null;
+  isBasic: boolean | null;
 }
 
 const AuthContext = createContext({} as AuthContextType)
@@ -33,7 +42,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const response = await sendMeRequest();
         if(response.status === 200) {
           const data = response.data;
-          setUser(data);
+          if('id' in data) {
+            setUser(data);
+          }
         }
         setIsLoading(false);
       } catch (error) {
@@ -46,10 +57,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const isAuthenticated = Boolean(user);
-  const isActivated = user ? user.isActivate : false;
+  const isActivated = user ? user.isActivate : null;
+  const isBasic = user ? user.providerType === 'BASIC' : null;
 
   return (
-    <AuthContext.Provider value={{ user, setUser, isAuthenticated, isActivated }}>
+    <AuthContext.Provider value={{ user, setUser, isAuthenticated, isActivated, isBasic }}>
       {!isLoading && children}
     </AuthContext.Provider>
   );
