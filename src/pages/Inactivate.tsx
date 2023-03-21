@@ -10,9 +10,8 @@ const Inactivate = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
-  const messageHandler = (response: AxiosResponse<any,any>) => {
+  const responseHandler = (response: AxiosResponse<any,any>) => {
     if(response.status === 400) {
-      console.log(response);
       enqueueSnackbar(response.data.error, { variant: "error" });
     }
     else {
@@ -23,7 +22,7 @@ const Inactivate = () => {
 
   const onClick = async () => {
     const response = await sendResendVerificationRequest();
-    messageHandler(response);
+    responseHandler(response);
   }
 
   return (
