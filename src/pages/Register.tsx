@@ -44,7 +44,7 @@ const Register = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
-  const messageHandler = (response: AxiosResponse<any,any>) => {
+  const responseHandler = (response: AxiosResponse<any,any>) => {
     if(response.status === 400) {
       enqueueSnackbar(response.data.error, { variant: "error" });
     }
@@ -56,7 +56,7 @@ const Register = () => {
 
   const onSubmit = async (data: FormInputs) => {
     const response = await sendRegisterRequest(data);
-    messageHandler(response);
+    responseHandler(response);
   };
 
 
@@ -106,7 +106,7 @@ const Register = () => {
             helperText={errors.confirmPassword?.message}
           />
           <Button type="submit" variant="contained" color="primary" fullWidth>
-            Register
+            Submit
           </Button>
           <Grid container>
             <Grid item>
