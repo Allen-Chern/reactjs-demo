@@ -12,9 +12,8 @@ const Verification = () => {
   const navigate = useNavigate();
   const { token } = useParams<{token: string}>();
 
-  const messageHandler = (response: AxiosResponse<any,any>) => {
+  const responseHandler = (response: AxiosResponse<any,any>) => {
     if(response.status === 400) {
-      console.log(response);
       enqueueSnackbar(response.data.error, { variant: "error" });
     }
     else {
@@ -27,12 +26,13 @@ const Verification = () => {
     const fetchData = async () => {
       if(token) {
         const response = await sendVerificationRequest(token);
-        messageHandler(response);
+        responseHandler(response);
       }
     }
   
     fetchData();
-  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Container component="main" maxWidth="xs">
