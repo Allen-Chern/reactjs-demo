@@ -32,11 +32,11 @@ const Login = () => {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
-  const { setUser } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
-  const messageHandler = (response: AxiosResponse<any,any>) => {
+  const responseHandler = (response: AxiosResponse<any,any>) => {
     if(response.status === 400) {
       enqueueSnackbar(response.data.error, { variant: "error" });
     }
@@ -51,7 +51,7 @@ const Login = () => {
 
   const onSubmit = async (data: FormInputs) => {
     const response = await sendLoginRequest(data);
-    messageHandler(response);
+    responseHandler(response);
   };
 
   const handleFacebookLogin = () => {
