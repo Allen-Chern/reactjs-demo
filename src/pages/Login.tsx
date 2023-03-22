@@ -5,7 +5,6 @@ import {
 import { AxiosResponse } from "axios";
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import * as yup from 'yup';
 import { facebookLoginUrl, googleLoginUrl } from "../configs/api";
 import { useAuth } from "../context/auth-context";
@@ -33,8 +32,7 @@ const Login = () => {
     mode: "onChange",
   });
   const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const { fetchUser } = useAuth();
 
   const responseHandler = (response: AxiosResponse<any,any>) => {
     if(response.status === 400) {
@@ -42,10 +40,7 @@ const Login = () => {
     }
     else {
       enqueueSnackbar('Success.', { variant: "success" });
-      setUser(response.data);
-      
-      const navigateTo = response.data.isActivate ? '/dashboard' : '/inactivate';
-      navigate(navigateTo);
+      fetchUser();
     }
   }
 
