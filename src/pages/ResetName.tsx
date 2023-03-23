@@ -37,7 +37,6 @@ const ResetName = () => {
     }
     else {
       setUser(response.data);
-      enqueueSnackbar('Success.', { variant: "success" });
       navigate('/profile');
     }
   }

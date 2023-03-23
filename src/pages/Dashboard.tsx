@@ -1,6 +1,5 @@
 import { Container, TextField, Typography } from "@material-ui/core";
 import { AxiosResponse } from "axios";
-import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/auth-context";
 import { sendDashboardRequest } from "../services/api";
@@ -15,7 +14,6 @@ type LoginInfo = {
 
 const Dashboard = () => {
   const classes = formStyles();
-  const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
   const [data, setData] = useState<LoginInfo>({
     userCreatedAt: '',
@@ -29,7 +27,6 @@ const Dashboard = () => {
       loginCount: response.data.loginCount.toString(),
       lastLoginTime: getTimeStamp(response.data.lastLoginTime)
     });
-    enqueueSnackbar('Success.', { variant: "success" });
   }
 
   useEffect(() => {

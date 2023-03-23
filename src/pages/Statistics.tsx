@@ -1,6 +1,5 @@
 import { Container, TextField, Typography } from "@material-ui/core";
 import { AxiosResponse } from "axios";
-import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { sendStatisticsRequest } from "../services/api";
 import { formStyles } from "../utils/form-styles";
@@ -13,7 +12,6 @@ type StatisticsInfo = {
 
 const Statistics = () => {
   const classes = formStyles();
-  const { enqueueSnackbar } = useSnackbar();
   const [data, setData] = useState<StatisticsInfo>({
     totalUsers: '',
     activeSessionUsers: '',
@@ -26,7 +24,6 @@ const Statistics = () => {
       activeSessionUsers: response.data.activeSessionUsers.toString(),
       avgSevenDayUsers: response.data.avgSevenDayUsers.toString(),
     });
-    enqueueSnackbar('Success.', { variant: "success" });
   }
 
   useEffect(() => {
