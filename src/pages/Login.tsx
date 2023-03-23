@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import * as yup from 'yup';
 import { facebookLoginUrl, googleLoginUrl } from "../configs/api";
 import { useAuth } from "../context/auth-context";
+import { useLoading } from "../context/loading-context";
 import { sendLoginRequest } from "../services/api";
 import { formStyles } from "../utils/form-styles";
 
@@ -33,8 +34,11 @@ const Login = () => {
   });
   const { enqueueSnackbar } = useSnackbar();
   const { fetchUser } = useAuth();
+  const { setLoading } = useLoading();
 
   const responseHandler = (response: AxiosResponse<any,any>) => {
+    setLoading(false);
+
     if(response.status === 400) {
       enqueueSnackbar(response.data.error, { variant: "error" });
     }
@@ -45,15 +49,19 @@ const Login = () => {
   }
 
   const onSubmit = async (data: FormInputs) => {
+    setLoading(true);
+
     const response = await sendLoginRequest(data);
     responseHandler(response);
   };
 
   const handleFacebookLogin = () => {
+    setLoading(true);
     window.location.href = facebookLoginUrl;
   }
 
   const handleGoogleLogin = () => {
+    setLoading(true);
     window.location.href = googleLoginUrl;
   }
 

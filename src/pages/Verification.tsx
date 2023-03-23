@@ -3,6 +3,7 @@ import { AxiosResponse } from "axios";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
+import { useLoading } from "../context/loading-context";
 import { sendVerificationRequest } from "../services/api";
 import { formStyles } from "../utils/form-styles";
 
@@ -12,9 +13,12 @@ const Verification = () => {
   const [showMessage, setShowMessage] = useState("");
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const { setLoading } = useLoading();
   const { token } = useParams<{token: string}>();
 
   const responseHandler = (response: AxiosResponse<any,any>) => {
+    setLoading(false);
+    
     if(response.status === 400) {
       enqueueSnackbar(response.data.error, { variant: "error" });
       setShowMessage(response.data.error);
@@ -33,6 +37,8 @@ const Verification = () => {
   }
 
   useEffect(() => {
+    setLoading(true);
+    
     const fetchData = async () => {
       if(token) {
         const response = await sendVerificationRequest(token);

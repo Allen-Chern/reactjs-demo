@@ -5,6 +5,7 @@ import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
+import { useLoading } from '../context/loading-context';
 import { sendRegisterRequest } from '../services/api';
 import { formStyles } from '../utils/form-styles';
 
@@ -43,8 +44,11 @@ const Register = () => {
   });
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const { setLoading } = useLoading();
 
   const responseHandler = (response: AxiosResponse<any,any>) => {
+    setLoading(false);
+    
     if(response.status === 400) {
       enqueueSnackbar(response.data.error, { variant: "error" });
     }
@@ -55,6 +59,8 @@ const Register = () => {
   }
 
   const onSubmit = async (data: FormInputs) => {
+    setLoading(true);
+
     const response = await sendRegisterRequest(data);
     responseHandler(response);
   };

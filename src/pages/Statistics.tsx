@@ -1,6 +1,7 @@
 import { Container, TextField, Typography } from "@material-ui/core";
 import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
+import { useLoading } from "../context/loading-context";
 import { sendStatisticsRequest } from "../services/api";
 import { formStyles } from "../utils/form-styles";
 
@@ -12,6 +13,7 @@ type StatisticsInfo = {
 
 const Statistics = () => {
   const classes = formStyles();
+  const { setLoading } = useLoading();
   const [data, setData] = useState<StatisticsInfo>({
     totalUsers: '',
     activeSessionUsers: '',
@@ -19,6 +21,8 @@ const Statistics = () => {
   });
   
   const responseHandler = (response: AxiosResponse<any,any>) => {
+    setLoading(false);
+    
     setData({
       totalUsers: response.data.totalUsers.toString(),
       activeSessionUsers: response.data.activeSessionUsers.toString(),
@@ -27,6 +31,8 @@ const Statistics = () => {
   }
 
   useEffect(() => {
+    setLoading(true);
+    
     const fetchData = async () => {
       const response = await sendStatisticsRequest();
       responseHandler(response);

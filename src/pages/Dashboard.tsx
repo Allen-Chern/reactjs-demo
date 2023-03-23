@@ -2,6 +2,7 @@ import { Container, TextField, Typography } from "@material-ui/core";
 import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/auth-context";
+import { useLoading } from "../context/loading-context";
 import { sendDashboardRequest } from "../services/api";
 import { formStyles } from "../utils/form-styles";
 import { getTimeStamp } from "../utils/time-stamp";
@@ -15,6 +16,8 @@ type LoginInfo = {
 const Dashboard = () => {
   const classes = formStyles();
   const { user } = useAuth();
+  const { setLoading } = useLoading();
+  
   const [data, setData] = useState<LoginInfo>({
     userCreatedAt: '',
     loginCount: '',
@@ -22,6 +25,8 @@ const Dashboard = () => {
   });
   
   const responseHandler = (response: AxiosResponse<any,any>) => {
+    setLoading(false);
+    
     setData({
       userCreatedAt: getTimeStamp(user?.createdAt),
       loginCount: response.data.loginCount.toString(),
@@ -30,6 +35,8 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
+    setLoading(true);
+    
     const fetchData = async () => {
       const response = await sendDashboardRequest();
       responseHandler(response);
