@@ -1,7 +1,6 @@
 import { Button, Container, Typography } from "@material-ui/core";
 import { AxiosResponse } from "axios";
 import { useSnackbar } from "notistack";
-import { useNavigate } from 'react-router-dom';
 import { useLoading } from "../context/loading-context";
 import { sendResendVerificationRequest } from "../services/api";
 import { formStyles } from "../utils/form-styles";
@@ -9,7 +8,6 @@ import { formStyles } from "../utils/form-styles";
 const Inactivate = () => {
   const classes = formStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
   const { setLoading } = useLoading();
   
   const responseHandler = (response: AxiosResponse<any,any>) => {
@@ -20,7 +18,6 @@ const Inactivate = () => {
     }
     else {
       enqueueSnackbar('You will recieve a verification mail, please check your email inbox.', { variant: "success" });
-      navigate('/login');
     }
   }
 

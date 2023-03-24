@@ -40,6 +40,7 @@ const ResetName = () => {
       enqueueSnackbar(response.data.error, { variant: "error" });
     }
     else {
+      enqueueSnackbar('Success.', { variant: "success" });
       setUser(response.data);
       navigate('/profile');
     }

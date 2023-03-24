@@ -61,6 +61,7 @@ const ResetPassword = () => {
       enqueueSnackbar(response.data.error, { variant: "error" });
     }
     else {
+      enqueueSnackbar('Success.', { variant: "success" });
       navigate('/profile');
     }
   }
